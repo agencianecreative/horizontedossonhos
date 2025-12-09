@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Horizonte dos Sonhos | Raspadinha de Natal</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Biblioteca de Confetes -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #D42426; /* Vermelho Natal */
+            --secondary: #165B33; /* Verde Pinheiro */
+            --gold: #F8B229; /* Dourado */
+            --dark: #1A1A1A;
+            --snow: #FFFFFF;
+            --chile-blue: #0039A6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            
+            /* ATUALIZADO: Imagem de fundo solicitada */
+            background-image: url('https://i.imgur.com/SGlwa4v.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Adiciona um background-attachment fixo para dar um efeito elegante ao rolar, se houver scroll */
+            background-attachment: fixed;
+            
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efeito de Neve (CSS Puro) */
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Ccircle cx='5' cy='5' r='2' fill='rgba(255,255,255,0.4)'/%3E%3C/svg%3E");
+            animation: snow 20s linear infinite;
+        }
+
+        @keyframes snow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 500px; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Logo e Cabeçalho */
+        .header {
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo {
+            max-width: 180px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-family: 'Mountains of Christmas', cursive;
+            color: var(--snow);
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #f0f0f0;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Área da Raspadinha */
+        .card-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: white;
+            padding: 5px;
+            background: linear-gradient(45deg, var(--gold), #FFF, var(--gold));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .scratch-area {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        /* Camada do Prêmio (Fundo) */
+        .prize-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: url('https://images.unsplash.com/photo-1545562083-a600704fa46e?q=80&w=600&auto=format&fit=crop'); /* Fundo Andes/Chile */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Overlay branco para legibilidade do texto do prêmio */
+        .prize-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.92);
+            z-index: 0;
+        }
+
+        .prize-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .prize-emoji {
+            font-size: 3.5rem;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .prize-title {
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.5rem;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .prize-code {
+            background: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: 2px dashed rgba(255,255,255,0.5);
+        }
+
+        /* Canvas (Camada de Raspar) */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            cursor: pointer;
+            touch-action: none; /* Impede scroll ao raspar no mobile */
+            transition: opacity 0.5s ease;
+        }
+
+        /* Botão de Ação */
+        .cta-container {
+            margin-top: 30px;
+            width: 100%;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .cta-container.active {
+            opacity: 1;
+            pointer-events: all;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            transition: transform 0.2s;
+            border: none;
+            width: 100%;
+        }
+
+        .whatsapp-btn:active {
+            transform: scale(0.95);
+        }
+
+        .whatsapp-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            fill: white;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            padding-bottom: 20px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividade para telas muito pequenas */
+        @media (max-width: 350px) {
+            .card-wrapper { width: 280px; height: 280px; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="snow-container"></div>
+
+    <div class="container">
+        <header class="header">
+            <img src="https://i.imgur.com/2P3JCBd.png" alt="Horizonte dos Sonhos" class="logo">
+            <h1>Natal dos Sonhos</h1>
+            <p class="subtitle" id="instruction-text">Raspe abaixo para revelar seu presente exclusivo do Chile!</p>
+        </header>
+
+        <div class="card-wrapper">
+            <div class="scratch-area" id="scratch-container">
+                <!-- O Canvas será inserido aqui via JS -->
+                
+                <!-- O Resultado fica "atrás" do canvas -->
+                <div class="prize-container">
+                    <div class="prize-content">
+                        <div class="prize-emoji" id="prize-emoji">🎁</div>
+                        <div class="prize-title" id="prize-text">Carregando...</div>
+                        <div id="code-container" style="display:none">
+                            <small style="color:#666; font-size:0.8rem; margin-bottom:5px">Seu Código:</small>
+                            <div class="prize-code" id="prize-code">CODE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-container" id="cta-box">
+            <a href="#" class="whatsapp-btn" id="whatsapp-link" target="_blank">
+                <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                <span id="cta-text">Resgatar Prêmio</span>
+            </a>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 Horizonte dos Sonhos. Feliz Natal!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Configurações Globais
+        const WHATSAPP_NUM = "554188219058";
+        const STORAGE_KEY = "horizonte_natal_premio_v1";
+
+        // Lista de Prêmios (Pesos simulam probabilidade: números maiores = mais chances)
+        const prizes = [
+            { id: 1, text: "10% OFF\nEM 1 PASSEIO", code: "NATAL10", type: "win", emoji: "🎟️", weight: 30 },
+            { id: 2, text: "20% OFF\nPACOTE TOTAL", code: "NATAL20", type: "win", emoji: "🌟", weight: 10 },
+            { id: 3, text: "NÃO FOI DESTA VEZ\n(Mas amamos você!)", code: null, type: "lose", emoji: "😢", weight: 20 },
+            { id: 4, text: "R$ 50,00\nDE DESCONTO", code: "VOUCHER50", type: "win", emoji: "💰", weight: 25 },
+            { id: 5, text: "R$ 100,00\nDE DESCONTO", code: "VOUCHER100", type: "win", emoji: "🎅", weight: 15 }
+        ];
+
+        // Elementos do DOM
+        const scratchContainer = document.getElementById('scratch-container');
+        const prizeTextEl = document.getElementById('prize-text');
+        const prizeCodeEl = document.getElementById('prize-code');
+        const codeContainer = document.getElementById('code-container');
+        const prizeEmojiEl = document.getElementById('prize-emoji');
+        const ctaBox = document.getElementById('cta-box');
+        const waLink = document.getElementById('whatsapp-link');
+        const ctaText = document.getElementById('cta-text');
+        const instructionText = document.getElementById('instruction-text');
+
+        let canvas, ctx;
+        let isDrawing = false;
+        let revealed = false;
+        let currentPrize = null;
+
+        // Inicialização
+        document.addEventListener("DOMContentLoaded", () => {
+            checkStorage();
+        });
+
+        function checkStorage() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+
+            if (savedData) {
+                // Usuário já jogou
+                const data = JSON.parse(savedData);
+                currentPrize = data;
+                renderPrize(currentPrize);
+                showResult(false); // false = sem animação de confete na reabertura
+                instructionText.textContent = "Você já abriu seu presente de Natal!";
+            } else {
+                // Novo jogo
+                pickRandomPrize();
+                initCanvas();
+            }
+        }
+
+        function pickRandomPrize() {
+            // Lógica de sorteio baseada em pesos
+            const totalWeight = prizes.reduce((sum, prize) => sum + prize.weight, 0);
+            let random = Math.random() * totalWeight;
+            
+            for (let prize of prizes) {
+                if (random < prize.weight) {
+                    currentPrize = prize;
+                    break;
+                }
+                random -= prize.weight;
+            }
+            renderPrize(currentPrize);
+        }
+
+        function renderPrize(prize) {
+            prizeTextEl.innerText = prize.text;
+            prizeEmojiEl.innerText = prize.emoji;
+
+            if (prize.type === 'win') {
+                codeContainer.style.display = 'block';
+                prizeCodeEl.innerText = prize.code;
+            } else {
+                codeContainer.style.display = 'none';
+            }
+        }
+
+        function initCanvas() {
+            canvas = document.createElement('canvas');
+            canvas.id = 'scratch-canvas';
+            // Tamanho exato do container
+            const rect = scratchContainer.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            
+            ctx = canvas.getContext('2d');
+            scratchContainer.appendChild(canvas);
+
+            // Desenhar a capa (Dourado com Texto)
+            drawCover();
+
+            // Event Listeners (Mouse e Touch)
+            canvas.addEventListener('mousedown', startScratch);
+            canvas.addEventListener('touchstart', startScratch);
+            
+            canvas.addEventListener('mousemove', scratching);
+            canvas.addEventListener('touchmove', scratching);
+            
+            canvas.addEventListener('mouseup', stopScratch);
+            canvas.addEventListener('touchend', stopScratch);
+            canvas.addEventListener('mouseleave', stopScratch);
+        }
+
+        function drawCover() {
+            // Gradiente Dourado Natalino
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#DAA520');
+            gradient.addColorStop(0.5, '#FFD700');
+            gradient.addColorStop(1, '#DAA520');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Padrão de flocos de neve sutis
+            ctx.fillStyle = "rgba(255,255,255,0.3)";
+            for(let i=0; i<20; i++) {
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*5, 0, Math.PI*2);
+                ctx.fill();
+            }
+
+            // Texto "Raspe Aqui"
+            ctx.fillStyle = "#B8860B"; // Dark Goldenrod
+            ctx.font = "bold 24px Montserrat";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("RASPE AQUI", canvas.width/2, canvas.height/2);
+            
+            // Borda decorativa
+            ctx.strokeStyle = "#FFF";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(10, 10, canvas.width-20, canvas.height-20);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            let clientX, clientY;
+            
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function startScratch(e) {
+            isDrawing = true;
+            scratching(e);
+        }
+
+        function stopScratch() {
+            isDrawing = false;
+            if (!revealed) checkRevealPercentage();
+        }
+
+        function scratching(e) {
+            if (!isDrawing || revealed) return;
+            e.preventDefault(); // Impede o scroll da tela no celular
+
+            const pos = getMousePos(e);
+            
+            // "Apagar" o canvas
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, 25, 0, Math.PI * 2); // Tamanho do pincel
+            ctx.fill();
+        }
+
+        function checkRevealPercentage() {
+            // Analisa os pixels do canvas
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            let transparentPixels = 0;
+            
+            // Checa canal alpha (cada pixel tem 4 valores: r,g,b,a)
+            for (let i = 3; i < pixels.length; i += 4) {
+                if (pixels[i] === 0) {
+                    transparentPixels++;
+                }
+            }
+            
+            const percentage = (transparentPixels / (pixels.length / 4)) * 100;
+            
+            // Se limpou mais de 40%, revela tudo
+            if (percentage > 40) {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            revealed = true;
+            
+            // Animação de fade out do canvas
+            canvas.style.opacity = '0';
+            setTimeout(() => {
+                canvas.remove();
+            }, 500);
+
+            // Salvar no LocalStorage
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(currentPrize));
+
+            showResult(true);
+        }
+
+        function showResult(animate) {
+            // Atualizar Botão WhatsApp
+            updateWhatsAppLink();
+
+            // Mostrar Botão
+            ctaBox.classList.add('active');
+
+            if (currentPrize.type === 'win') {
+                instructionText.textContent = "Parabéns! Você ganhou um desconto exclusivo.";
+                if (animate) triggerConfetti();
+            } else {
+                instructionText.textContent = "Ahh, que pena!";
+                ctaText.innerText = "Agendar Passeio Mesmo Assim";
+            }
+        }
+
+        function updateWhatsAppLink() {
+            let message = "";
+            
+            if (currentPrize.type === 'win') {
+                message = `Olá Horizonte dos Sonhos! 🎄 Acabei de ganhar na raspadinha de natal: *${currentPrize.text.replace('\n', ' ')}*. Meu código é: *${currentPrize.code}*. Quero aproveitar meu desconto!`;
+            } else {
+                message = `Olá Horizonte dos Sonhos! Participei da raspadinha mas não ganhei o desconto desta vez. Mesmo assim, gostaria de saber mais sobre os passeios no Chile! 🏔️`;
+            }
+
+            const url = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(message)}`;
+            waLink.href = url;
+        }
+
+        function triggerConfetti() {
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#D42426', '#165B33', '#F8B229'] // Cores do tema
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#D42426', '#165B33', '#F8B229']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
